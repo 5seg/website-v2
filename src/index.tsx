@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import { html, Html } from "@elysiajs/html";
+import { Base } from "./layout/Base";
 
 const api = new Elysia({ prefix: "/api" }).get("/", {
   ok: true,
@@ -10,14 +11,9 @@ const app = new Elysia()
   .use(api)
   .use(html())
   .get("/", () => (
-    <html>
-      <head>
-        <title>Hello, Elysia!</title>
-      </head>
-      <body>
-        <h1>Hello, Elysia!</h1>
-      </body>
-    </html>
+    <Base title="Hello, Elysia!" desc="yay! it works!">
+      <h1>Hello, Elysia!</h1>
+    </Base>
   ))
   .listen(9555);
 
