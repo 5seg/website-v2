@@ -1,6 +1,7 @@
-import { Elysia } from "elysia";
+import { Elysia, file } from "elysia";
 import { html, Html } from "@elysiajs/html";
 import { Base } from "./layout/Base";
+import { join } from "node:path";
 
 const api = new Elysia({ prefix: "/api" }).get("/", {
   ok: true,
@@ -15,6 +16,7 @@ const app = new Elysia()
       <h1>Hello, Elysia!</h1>
     </Base>
   ))
+  .get("/index.css", () => file(join(__dirname, "index.css")))
   .listen(9555);
 
 console.log(
