@@ -2,6 +2,8 @@ import { Elysia, file } from "elysia";
 import { html, Html } from "@elysiajs/html";
 import { Base } from "./layout/Base";
 import { join } from "node:path";
+import { staticPlugin } from "@elysiajs/static";
+import { Hero } from "./components/Hero";
 
 const api = new Elysia({ prefix: "/api" }).get("/", {
   ok: true,
@@ -9,11 +11,12 @@ const api = new Elysia({ prefix: "/api" }).get("/", {
 });
 
 const app = new Elysia()
+  .use(staticPlugin())
   .use(api)
   .use(html())
   .get("/", () => (
     <Base title="Hello, Elysia!" desc="yay! it works!">
-      <h1>Hello, Elysia!</h1>
+      <Hero />
     </Base>
   ))
   .get("/index.css", () => file(join(__dirname, "index.css")))
