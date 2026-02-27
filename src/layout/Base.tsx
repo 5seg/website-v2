@@ -1,5 +1,4 @@
 import { Html } from "@elysiajs/html";
-import { join } from "node:path";
 
 export async function Base(props: {
   title: string;
