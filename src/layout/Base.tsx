@@ -1,10 +1,17 @@
 import { Html } from "@elysiajs/html";
+import { join } from "node:path";
 
-export function Base(props: {
+export async function Base(props: {
   title: string;
   desc: string;
   children: JSX.Element;
 }) {
+  let importCardStyle = false;
+  console.log(await props.children.toString());
+  if (await props.children.toString().includes('<div class="card"')) {
+    console.log("Card detected");
+    importCardStyle = true;
+  }
   return (
     <html>
       <head>
@@ -13,6 +20,7 @@ export function Base(props: {
         <meta name="description" content={props.desc} />
         <link rel="stylesheet" href="/public/kiso.css" />
         <link rel="stylesheet" href="/index.css" />
+        {importCardStyle && <link rel="stylesheet" href="/public/card.css" />}
       </head>
       <body>{props.children}</body>
     </html>

@@ -4,6 +4,27 @@ html {
   text-align: center;
 }
 
+body {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  margin-top: 2rem;
+}
+
+/* md */
+@media (min-width: 768px) {
+  body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 32rem;
+  }
+}
+
+:root {
+  --spacing: 0.25rem;
+}
+
 .font-bold {
   font-weight: bold;
 }
@@ -11,4 +32,8 @@ html {
 .text-xl {
   font-size: 1.25rem;
   line-height: calc(1.75 / 1.25);
+}
+
+.mt-2 {
+  margin-top: calc(var(--spacing) * 2);
 }
