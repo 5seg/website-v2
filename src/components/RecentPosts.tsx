@@ -1,12 +1,14 @@
 import { Html } from "@elysiajs/html";
 import { Card } from "./Card";
+import { join } from "node:path";
 
 interface articleListT {
   data: {
     id: number;
     documentId: string;
     title: string;
-    publishedAt: Date;
+    /** Date as string */
+    publishedAt: string;
   }[];
 }
 
@@ -25,6 +27,7 @@ const get = async () => {
 };
 
 export async function RecentPosts() {
+  const style = await Bun.file(join(__dirname, "../assets/recent.css")).text();
   const articles = await get();
   return (
     <Card>
@@ -32,10 +35,13 @@ export async function RecentPosts() {
         <h2>最近の記事</h2>
         {articles ? (
           articles.data.map((article) => (
-            <a href={`/articles/${article.documentId}`}>
-              <p>{article.publishedAt.toDateString()}</p>
-              <h3>{article.title}</h3>
-            </a>
+            <div class="recent-articles">
+              <a href={`/articles/${article.documentId}`}>
+                <p>{article.publishedAt}</p>
+                <h3>{article.title}</h3>
+              </a>
+              <style>{style}</style>
+            </div>
           ))
         ) : (
           <p>No articles...</p>

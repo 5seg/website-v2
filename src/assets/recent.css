@@ -1,0 +1,11 @@
+.recent-articles {
+  border-radius: 0.75rem;
+  border: 1px solid #b1a1a4;
+  padding: 1rem;
+  text-align: start;
+  transition: border-color 0.3s ease;
+  margin: 0.5rem 1rem;
+}
+.recent-articles:hover {
+  border-color: #8e8183;
+}
