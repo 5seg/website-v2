@@ -6,7 +6,7 @@ export async function Base(props: {
   children: JSX.Element;
 }) {
   let importCardStyle = false;
-  console.log(await props.children.toString());
+  // console.log(await props.children.toString());
   if (await props.children.toString().includes('<div class="card"')) {
     console.log("Card detected");
     importCardStyle = true;

@@ -46,6 +46,7 @@ export async function RecentPosts() {
         ) : (
           <p>No articles...</p>
         )}
+        {articles && <a href="/articles">全記事のリストを見る</a>}
       </>
     </Card>
   );

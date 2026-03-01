@@ -23,6 +23,13 @@ body {
 
 :root {
   --spacing: 0.25rem;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
 }
 
 .font-bold {
@@ -34,6 +41,36 @@ body {
   line-height: calc(1.75 / 1.25);
 }
 
+.text-gray-400 {
+  color: oklch(70.7% 0.022 261.325);
+}
+
+.text-gray-500 {
+  color: oklch(55.1% 0.027 264.364);
+}
+
 .mt-2 {
   margin-top: calc(var(--spacing) * 2);
+}
+
+.button {
+  width: fit-content;
+  background-color: rgb(0, 0, 0, 0.2);
+  border: 1px solid #b1a1a4;
+  border-radius: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  transition: border-color 0.3s ease;
+  margin: 0.25rem auto;
+}
+
+a {
+  transition: color 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+a:hover {
+  color: #b2a6a8;
+}
+
+.button:hover {
+  border-color: #8e8183;
 }
