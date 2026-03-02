@@ -41,11 +41,6 @@ export async function Articles(page: string = "1") {
     join(__dirname, "../assets/articles.css"),
   ).text();
   const articles = await get(page);
-  const showPagenation: string | null = articles
-    ? articles.meta.pagination.pageCount !== 1
-      ? ""
-      : null
-    : null;
   return (
     <Card>
       <style>{style}</style>
