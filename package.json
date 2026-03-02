@@ -8,7 +8,10 @@
   "dependencies": {
     "@elysiajs/html": "^1.4.0",
     "@elysiajs/static": "^1.4.7",
-    "elysia": "latest"
+    "elysia": "latest",
+    "marked": "^17.0.3",
+    "marked-shiki": "^1.2.1",
+    "shiki": "^4.0.1"
   },
   "devDependencies": {
     "bun-types": "latest"
