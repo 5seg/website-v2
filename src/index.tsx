@@ -89,3 +89,12 @@ const app = new Elysia()
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );
+
+const shutdown = async () => {
+  if (app.server) await app.server.stop();
+  console.log("Goodbye");
+  process.exit(0);
+};
+
+process.on("SIGTERM", shutdown);
+process.on("SIGINT", shutdown);
