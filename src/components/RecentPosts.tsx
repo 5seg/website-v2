@@ -27,7 +27,6 @@ const get = async () => {
 };
 
 export async function RecentPosts() {
-  const style = await Bun.file(join(__dirname, "../assets/recent.css")).text();
   const articles = await get();
   return (
     <Card>
@@ -40,7 +39,6 @@ export async function RecentPosts() {
                 <p>{article.publishedAt}</p>
                 <h3>{article.title}</h3>
               </a>
-              <style>{style}</style>
             </div>
           ))
         ) : (
