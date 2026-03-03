@@ -186,8 +186,9 @@
   * Set a monospace font family referencing Tailwind.
   * @see https://tailwindcss.com/docs/font-family
   */
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-    "Liberation Mono", "Courier New", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
 
   /* Font feature settings can have adverse effects on monospaced fonts, so their values are explicitly set to `initial` to prevent inheritance. */
   font-feature-settings: initial;
@@ -311,157 +312,6 @@
 :where(caption:lang(en)) {
   /* Prevents the last line of text from ending with a single word, which can look awkward (known as an orphan). */
   text-wrap: pretty;
-}
-
-/* ======================================================
-//  MARK: Forms
-// ====================================================== */
-:where(button, input, select, textarea),
-::file-selector-button {
-  /*
-  * These elements are often styled with a border, so a `1px` border is applied by default for consistency.
-  * This ensures readability even for unstyled elements.
-  * When resetting, it's recommended to use `border-color: transparent` instead of `border: none` to account for forced color modes.
-  */
-  border-width: 1px;
-  border-style: solid;
-
-  /* These styles specified in the UA stylesheet are often unnecessary, so they are reset to allow for inheritance. */
-  border-color: unset;
-  border-radius: unset;
-  color: unset;
-  font: unset;
-  letter-spacing: unset;
-  text-align: unset;
-}
-
-:where(input:is([type="radio" i], [type="checkbox" i])) {
-  /* The `margin` specified in the User Agent (UA) stylesheet is often unnecessary, so it is reset here. */
-  margin: unset;
-}
-
-:where(input[type="file" i]) {
-  /* The `border` is often unnecessary, so it is reset here. */
-  border: unset;
-}
-
-:where(input[type="search" i]) {
-  /* Remove the rounded corners of search inputs on macOS and normalize the background color. */
-  -webkit-appearance: textfield;
-}
-
-@supports (-webkit-touch-callout: none) {
-  :where(input[type="search" i]) {
-    /* normalize the background color on iOS. */
-    background-color: Canvas;
-  }
-}
-
-:where(
-    input:is(
-        [type="tel" i],
-        [type="url" i],
-        [type="email" i],
-        [type="number" i]
-      ):not(:placeholder-shown)
-  ) {
-  /*
-  * Certain input types need to maintain left alignment even in right-to-left (RTL) languages.
-  * However, this only applies when the value is not empty, as the placeholder should be right-aligned.
-  * @see https://rtlstyling.com/posts/rtl-styling#form-inputs
-  */
-  direction: ltr;
-}
-
-:where(textarea) {
-  /* The `margin-block` specified in Firefox's UA stylesheet is often unnecessary, so it is reset. */
-  margin-block: unset;
-
-  /* Allows vertical resizing for `<textarea>` elements. */
-  resize: block;
-}
-
-:where(
-    input:not([type="button" i], [type="submit" i], [type="reset" i]),
-    textarea,
-    [contenteditable]
-  ) {
-  /* Set to `no-autospace` because `text-autospace` can insert spaces during input, potentially causing erratic behavior. */
-  text-autospace: no-autospace;
-}
-
-:where(
-    button,
-    input:is([type="button" i], [type="submit" i], [type="reset" i])
-  ),
-::file-selector-button {
-  /* The `background-color` specified in the User Agent (UA) stylesheet is often unnecessary, so it is reset here. */
-  background-color: unset;
-}
-
-:where(
-    button,
-    input:is([type="button" i], [type="submit" i], [type="reset" i]),
-    [role="tab" i],
-    [role="button" i],
-    [role="option" i]
-  ),
-::file-selector-button {
-  /*
-  * On iOS, double-tapping a button can cause zooming, which harms usability.
-  * `touch-action: manipulation` is specified to disable zooming on double-tap.
-  * Third-party plugins such as Swiper sometimes use div elements with these roles as buttons, since double-tapping a div can still trigger zooming, it's advisable to specify this property.
-  */
-  touch-action: manipulation;
-}
-
-:where(
-    button:enabled,
-    label[for],
-    select:enabled,
-    input:is(
-        [type="button" i],
-        [type="submit" i],
-        [type="reset" i],
-        [type="radio" i],
-        [type="checkbox" i]
-      ):enabled,
-    [role="tab" i],
-    [role="button" i],
-    [role="option" i]
-  ),
-:where(:enabled)::file-selector-button {
-  /* Indicate clickable elements with a pointer cursor. */
-  cursor: pointer;
-}
-
-:where(fieldset) {
-  /*
-  * Prevent fieldset from causing overflow.
-  * Reset the default `min-inline-size: min-content` to prevent children from stretching fieldset.
-  * @see https://github.com/twbs/bootstrap/issues/12359
-  */
-  min-inline-size: 0;
-
-  /* The following default styles are often unnecessary, so they are reset. */
-  margin-inline: unset;
-  padding: unset;
-  border: unset;
-}
-
-:where(legend) {
-  /* The default `padding-inline` is often unnecessary, so it is reset. */
-  padding-inline: unset;
-}
-
-:where(progress) {
-  /* Resets the vertical alignment of the `<progress>` element to its initial value. */
-  vertical-align: unset;
-}
-
-::placeholder {
-  /* Standardize the opacity of placeholder text (it may be set lower by default in Firefox). */
-  opacity: unset;
 }
 
 /* ======================================================
