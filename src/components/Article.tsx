@@ -2,6 +2,9 @@ import { Html } from "@elysiajs/html";
 import { Marked } from "marked";
 import markedShiki from "marked-shiki";
 import { bundledLanguages, createHighlighter } from "shiki";
+import { join } from "node:path";
+import { Card } from "./Card";
+import { gfmHeadingId } from "marked-gfm-heading-id";
 
 interface articleT {
   data: {
@@ -43,6 +46,11 @@ export async function Article(id: string, fromRoot = false) {
     themes: ["dark-plus"],
   });
   const html = await new Marked()
+    .use({
+      breaks:
+        new Date(json.data.updatedAt) > new Date("2026-03-02T03:32:21.679Z"),
+    })
+    .use(gfmHeadingId())
     .use(
       markedShiki({
         highlight(code, l) {
@@ -55,5 +63,24 @@ export async function Article(id: string, fromRoot = false) {
       }),
     )
     .parse(json.data.content);
-  return <div>{id}</div>;
+  const style = await Bun.file(join(__dirname, "../assets/article.css")).text();
+  return (
+    <Card>
+      <style>{style}</style>
+      <div class="article">
+        <div class="article-pre">
+          <h1>{json.data.title}</h1>
+          <p class="font-mono text-gray-500">{json.data.publishedAt}</p>
+        </div>
+        <div class="article-main">{html}</div>
+      </div>
+      <hr class="hr1" />
+      {fromRoot ? (
+        <a href="/">トップページへ ↩️</a>
+      ) : (
+        <a href="/articles">記事一覧 ↩️</a>
+      )}
+      <hr class="hr2" />
+    </Card>
+  );
 }
