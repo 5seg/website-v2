@@ -6,7 +6,8 @@ const server = Bun.serve({
       if (!pathname.includes(".")) pathname = pathname + ".html";
       return pathname;
     })();
-    const path = "dist/" + name;
+    const path = "dist" + name;
+    console.log(path);
     const file = Bun.file(path);
     return new Response(file);
   },
