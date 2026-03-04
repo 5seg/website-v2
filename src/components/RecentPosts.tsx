@@ -35,7 +35,7 @@ export async function RecentPosts() {
         {articles ? (
           articles.data.map((article) => (
             <div class="recent-articles">
-              <a href={`/articles/${article.documentId}`}>
+              <a href={`/articles/${article.documentId}?ref=top`}>
                 <p>{article.publishedAt}</p>
                 <h3>{article.title}</h3>
               </a>
