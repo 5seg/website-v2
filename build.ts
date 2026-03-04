@@ -120,7 +120,7 @@ const build = async (endpoint: string) => {
     log(`✅ Copied index.css (${estimated()}ms)`),
   );
   const faviconFile = Bun.file("src/favicon.ico");
-  await Bun.write("dist/favicon.ico", cssFile).then(() =>
+  await Bun.write("dist/favicon.ico", faviconFile).then(() =>
     log(`✅ Copied favicon.ico (${estimated()}ms)`),
   );
 
