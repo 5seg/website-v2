@@ -84,6 +84,7 @@ const app = new Elysia()
     );
   })
   .get("/index.css", () => file(join(__dirname, "index.css")))
+  .get("/favicon.ico", () => file(join(__dirname, "favicon.ico")))
   .listen(9555);
 
 console.log(
