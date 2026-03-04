@@ -36,8 +36,7 @@ body {
   margin-bottom: calc(var(--spacing) * 2);
   border-radius: var(--radius-xl);
   padding: calc(var(--spacing) * 3) calc(var(--spacing) * 2);
-  overflow: scroll;
-  scrollbar-color: #dfcfd2;
+  overflow-x: scroll;
 }
 
 hr {
