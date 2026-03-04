@@ -1,0 +1,114 @@
+import { readdirSync, existsSync } from "node:fs";
+import { mkdir, rm } from "node:fs/promises";
+
+const pf = performance;
+let pf_start: number;
+let start: number;
+
+interface articlesT {
+  id: number;
+  documentId: string;
+}
+
+const log = (...data: any[]) => {
+  console.log(`[${(pf.now() - pf_start).toFixed(5)}]`, ...data);
+};
+
+const resetTimer = () => (start = new Date().getTime());
+const estimated = (epoch: number = start) => new Date().getTime() - epoch;
+
+const awaitForServer_startUp = () =>
+  new Promise<void>(async (_) => {
+    while (1) {
+      try {
+        const res = await fetch("http://127.0.0.1:9555", {
+          signal: AbortSignal.timeout(1000),
+        });
+        if (res.ok) break;
+      } catch {}
+    }
+    _();
+  });
+
+const awaitForServer_stop = (proc: Bun.Subprocess<any>) =>
+  new Promise<void>(async (_) => {
+    while (!proc.killed) {
+      await new Promise<void>((_) =>
+        setTimeout(() => {
+          _();
+        }, 1000),
+      );
+    }
+    _();
+  });
+
+const build = async (endpoint: string) => {
+  pf_start = pf.now();
+  const buildTime_0 = new Date().getTime();
+  log("🔄 Building");
+  resetTimer();
+  const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
+  const articles = (
+    (
+      await (
+        await fetch(
+          endpoint + "/articles?fields[0]=documentId&pagination[pageSize]=9999",
+        )
+      ).json()
+    ).data as articlesT[]
+  ).map((x) => x.documentId);
+  log(`✅ Found ${articles.length} articles`);
+  await awaitForServer_startUp();
+  log(`🕓 Server started (${estimated()}ms)`);
+
+  const locations: string[] = [
+    "/",
+    "/articles",
+    ...articles.map((x) => "/articles/" + x),
+  ];
+
+  if (existsSync("dist")) await rm("dist", { recursive: true });
+  await mkdir("dist");
+
+  const fetchPromises = locations.map(async (x) => {
+    const res = await (await fetch("http://127.0.0.1:9555" + x)).text();
+    const filename = x;
+    const path = "dist" + (filename.length > 1 ? filename : "/index") + ".html";
+    await Bun.write(path, res);
+    log("📥", path);
+  });
+  resetTimer();
+  await Promise.all(fetchPromises).then(() =>
+    log(`✅ Fetched ${fetchPromises.length} pages (${estimated()}ms)`),
+  );
+
+  const publicFiles = readdirSync("public");
+  const copyPromises = publicFiles.map(async (x) => {
+    const file = Bun.file("public/" + x);
+    const path = "dist/public/" + x;
+    await Bun.write(path, file);
+    log("💾", path);
+  });
+  resetTimer();
+  await Promise.all(copyPromises).then(() =>
+    log(`✅ Copied ${copyPromises.length} public files (${estimated()}ms)`),
+  );
+
+  resetTimer();
+  const cssFile = Bun.file("src/index.css");
+  await Bun.write("dist/index.css", cssFile).then(() =>
+    log(`✅ Copied index.css (${estimated()}ms)`),
+  );
+
+  log(`✨ Done! (${estimated(buildTime_0)}ms)`);
+  proc.kill();
+  await awaitForServer_stop(proc);
+  process.exit(0);
+};
+
+if (!process.env.API_ENDPOINT) {
+  console.error("API_ENDPOINT is not defined at .env");
+  process.exit(1);
+}
+
+build(process.env.API_ENDPOINT);
