@@ -1,3 +1,4 @@
+import { minify } from "html-minifier-terser";
 import { readdirSync, existsSync } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 
@@ -42,6 +43,21 @@ const awaitForServer_stop = (proc: Bun.Subprocess<any>) =>
     _();
   });
 
+const minifier = async (html: string) => {
+  const minified = await minify(html, {
+    removeAttributeQuotes: false, //prettier will fails parsing when enabled
+    noNewlinesBeforeTagClose: true,
+    collapseWhitespace: true,
+    useShortDoctype: true,
+    removeEmptyElements: true,
+    removeRedundantAttributes: true,
+    minifyCSS: {
+      level: 0,
+    },
+  });
+  return minified;
+};
+
 const build = async (endpoint: string) => {
   pf_start = pf.now();
   const buildTime_0 = new Date().getTime();
@@ -71,7 +87,9 @@ const build = async (endpoint: string) => {
   await mkdir("dist");
 
   const fetchPromises = locations.map(async (x) => {
-    const res = await (await fetch("http://127.0.0.1:9555" + x)).text();
+    const res = await minifier(
+      await (await fetch("http://127.0.0.1:9555" + x)).text(),
+    );
     const filename = x;
     const path = "dist" + (filename.length > 1 ? filename : "/index") + ".html";
     await Bun.write(path, res);
@@ -85,8 +103,10 @@ const build = async (endpoint: string) => {
   const publicFiles = readdirSync("public");
   const copyPromises = publicFiles.map(async (x) => {
     const file = Bun.file("public/" + x);
+    const canMinify = file.name && file.name.endsWith(".css");
+    const minified = canMinify ? await minifier(await file.text()) : null;
     const path = "dist/public/" + x;
-    await Bun.write(path, file);
+    await Bun.write(path, canMinify ? minified! : file);
     log("💾", path);
   });
   resetTimer();
