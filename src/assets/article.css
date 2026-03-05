@@ -29,6 +29,10 @@ body {
     /*  */
     margin-right: calc(var(--spacing) * 2);
   }
+  h3 {
+    margin-top: 0.1rem;
+    margin-bottom: 0.25rem;
+  }
   h3::before {
     color: #917378;
     content: "###";
