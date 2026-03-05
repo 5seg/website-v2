@@ -1,5 +1,12 @@
 body {
-  width: 48rem;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 48rem;
+  }
 }
 
 .article {
