@@ -5,7 +5,7 @@
   text-align: start;
   transition: border-color 0.3s ease;
   margin: 0.5rem 1rem;
-}
-.recent-articles:hover {
-  border-color: #8e8183;
+  &:hover {
+    border-color: #7c2d12;
+  }
 }
