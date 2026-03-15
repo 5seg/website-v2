@@ -28,6 +28,11 @@ export async function Base(props: {
         {importRecentStyle && (
           <link rel="stylesheet" href="/public/recent.css" />
         )}
+        <script
+          defer
+          src="https://u.5seg.top/script.js"
+          data-website-id="7b088d5c-069e-4582-b4ec-5122486702b7"
+        ></script>
       </head>
       <body>{props.children}</body>
     </html>
