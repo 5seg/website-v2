@@ -5,7 +5,11 @@ export function Hero() {
   return (
     <div>
       <h1>5segments</h1>
-      <img src="/public/avatar.avif" style="border-radius:9999%;" />
+      <img
+        src="/public/avatar.avif"
+        style="border-radius:9999%;"
+        alt="avatar"
+      />
       <p class="text-xl font-bold mt-2">Student / Web Developer</p>
       <Card>
         <>

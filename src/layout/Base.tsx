@@ -17,7 +17,10 @@ export async function Base(props: {
     importRecentStyle = true;
   }
   return (
-    <html style="background: #381d24;color: #dfcfd2;text-align: center;">
+    <html
+      style="background: #381d24;color: #dfcfd2;text-align: center;"
+      lang="ja"
+    >
       <head>
         <title>{props.title}</title>
         <link rel="stylesheet" href="/index.css" />
