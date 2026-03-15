@@ -72,7 +72,7 @@ export async function Article(id: string, fromRoot = false) {
           <h1>{json.data.title}</h1>
           <p class="font-mono text-gray-500">{json.data.publishedAt}</p>
         </div>
-        <div class="article-main">{html}</div>
+        <main class="article-main">{html}</main>
       </div>
       <hr class="hr1" />
       {fromRoot ? (

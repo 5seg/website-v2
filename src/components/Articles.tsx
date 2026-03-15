@@ -52,7 +52,7 @@ export async function Articles(page: string = "1") {
           {articles?.meta.pagination.pageCount ?? "?"}
         </p>
       </div>
-      <>
+      <main>
         {articles ? (
           articles.data.map((post) => (
             <div class="article-pre">
@@ -69,7 +69,7 @@ export async function Articles(page: string = "1") {
         ) : (
           <p>No articles...</p>
         )}
-      </>
+      </main>
 
       {articles && articles.meta.pagination.pageCount > 1 ? (
         <div class="pagination font-mono">

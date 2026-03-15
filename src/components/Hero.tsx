@@ -3,7 +3,7 @@ import { Card } from "./Card";
 
 export function Hero() {
   return (
-    <div>
+    <main>
       <h1>5segments</h1>
       <img
         src="/public/avatar.avif"
@@ -17,6 +17,6 @@ export function Hero() {
           <p>JavaScript(TypeScript)を主に書きます。</p>
         </>
       </Card>
-    </div>
+    </main>
   );
 }
