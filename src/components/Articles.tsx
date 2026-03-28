@@ -28,7 +28,7 @@ const get = async (page: string) => {
   builtURL.searchParams.append("fields[2]", "publishedAt");
   builtURL.searchParams.append("sort", "publishedAt:desc");
   builtURL.searchParams.append("pagination[page]", page);
-  builtURL.searchParams.append("pagination[pageSize]", "5");
+  builtURL.searchParams.append("pagination[pageSize]", "25");
   const res = await fetch(builtURL);
   if (res.ok) {
     const data = (await res.json()) as articleListT;
@@ -75,7 +75,7 @@ export async function Articles(page: string = "1") {
         <div class="pagination font-mono">
           {articles.meta.pagination.page > 1 ? (
             <a
-              href={`/articles/page/${articles.meta.pagination.page - 1}`}
+              href={`/articles?page=${articles.meta.pagination.page - 1}`}
               rel="prev"
             >
               {"<"} Page {articles.meta.pagination.page - 1}
@@ -86,7 +86,7 @@ export async function Articles(page: string = "1") {
           {articles.meta.pagination.page !==
           articles.meta.pagination.pageCount ? (
             <a
-              href={`/articles/page/${articles.meta.pagination.page + 1}`}
+              href={`/articles?page=${articles.meta.pagination.page + 1}`}
               rel="next"
             >
               Page {articles.meta.pagination.page + 1} {">"}
