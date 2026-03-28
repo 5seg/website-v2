@@ -145,9 +145,15 @@ const build = async (endpoint: string) => {
   await Bun.write("dist/index.css", cssFile).then(() =>
     log(`✅ Copied index.css (${estimated()}ms)`),
   );
+  resetTimer();
   const faviconFile = Bun.file("src/favicon.ico");
   await Bun.write("dist/favicon.ico", faviconFile).then(() =>
     log(`✅ Copied favicon.ico (${estimated()}ms)`),
+  );
+  resetTimer();
+  const robotFile = Bun.file("src/robots.txt");
+  await Bun.write("dist/robots.txt", robotFile).then(() =>
+    log(`✅ Copied robots.txt (${estimated()}ms)`),
   );
 
   resetTimer();
