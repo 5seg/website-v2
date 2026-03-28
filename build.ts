@@ -29,6 +29,7 @@ const buildSitemap = () => {
     xml += tab() + "<url>\n";
     xml += tab(2) + `<loc>${page.loc}</loc>\n`;
     if (page.lastmod) xml += tab(2) + `<lastmod>${page.lastmod}</lastmod>\n`;
+    xml += tab() + "</url>\n";
   }
   xml += "</urlset>";
   return xml;
