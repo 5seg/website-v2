@@ -54,8 +54,16 @@ const app = new Elysia()
       </Base>
     );
   })
-  .get("/articles", async ({ request }) => {
-    const page = new URL(request.url).searchParams.get("page") ?? "1";
+  .get("/articles", async () => {
+    const articles = await Articles("1");
+    return (
+      <Base title="5seg's blog" desc="記事一覧">
+        {articles}
+      </Base>
+    );
+  })
+  .get("/articles/page/:number", async ({ params }) => {
+    const page = params.number;
     const articles = await Articles(page);
     return (
       <Base title="5seg's blog" desc="記事一覧">
