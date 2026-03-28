@@ -5,11 +5,34 @@ import { mkdir, rm } from "node:fs/promises";
 const pf = performance;
 let pf_start: number;
 let start: number;
-
 interface articlesT {
   id: number;
   documentId: string;
+  updatedAt: Date;
 }
+
+interface pageT {
+  loc: string;
+  lastmod?: Date;
+}
+
+const pages: pageT[] = [];
+const getURL = (path: string) => "https://5seg.top" + path;
+pages.push({ loc: getURL("/") });
+pages.push({ loc: getURL("/articles") });
+
+const buildSitemap = () => {
+  const tab = (size = 1) => " ".repeat(2 * size);
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  for (const page of pages) {
+    xml += tab() + "<url>\n";
+    xml += tab(2) + `<loc>${page.loc}</loc>\n`;
+    if (page.lastmod) xml += tab(2) + `<lastmod>${page.lastmod}</lastmod>\n`;
+  }
+  xml += "</urlset>";
+  return xml;
+};
 
 const log = (...data: any[]) => {
   console.log(`[${(pf.now() - pf_start).toFixed(5)}]`, ...data);
@@ -64,15 +87,18 @@ const build = async (endpoint: string) => {
   log("🔄 Building");
   resetTimer();
   const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
-  const articles = (
-    (
-      await (
-        await fetch(
-          endpoint + "/articles?fields[0]=documentId&pagination[pageSize]=9999",
-        )
-      ).json()
-    ).data as articlesT[]
-  ).map((x) => x.documentId);
+  const resp = await fetch(
+    endpoint +
+      "/articles?fields[0]=documentId&fields[1]=updatedAt&pagination[pageSize]=9999",
+  );
+  const data = (await resp.json()).data as articlesT[];
+  data.reverse().forEach((data) => {
+    pages.push({
+      loc: getURL(`/articles/${data.documentId}`),
+      lastmod: data.updatedAt,
+    });
+  });
+  const articles = data.map((x) => x.documentId);
   log(`✅ Found ${articles.length} articles`);
   await awaitForServer_startUp();
   log(`🕓 Server started (${estimated()}ms)`);
@@ -124,6 +150,11 @@ const build = async (endpoint: string) => {
     log(`✅ Copied favicon.ico (${estimated()}ms)`),
   );
 
+  resetTimer();
+  const xml = buildSitemap();
+  await Bun.write("dist/sitemap.xml", xml).then(() =>
+    log(`✅️ Built sitemap.xml (${estimated()}ms)`),
+  );
   log(`✨ Done! (${estimated(buildTime_0)}ms)`);
   proc.kill();
   await awaitForServer_stop(proc);
