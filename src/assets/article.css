@@ -45,7 +45,7 @@ body {
   }
 }
 
-.shiki {
+code > pre.shiki {
   margin-top: calc(var(--spacing) * 2);
   margin-bottom: calc(var(--spacing) * 2);
   border-radius: var(--radius-xl);

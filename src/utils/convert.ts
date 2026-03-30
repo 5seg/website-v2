@@ -52,14 +52,16 @@ const highlight = async (html: string, langs: string[]) => {
         .replaceAll("&#x27;", "`")
         .replaceAll("&lt;", "<")
         .replaceAll("&gt;", ">");
-      text.replace(
-        (() =>
-          hightlighter.codeToHtml(code, {
-            theme: "dark-plus",
-            lang: lang,
-          }))(),
-        { html: true },
-      );
+      if (code.length > 0) {
+        text.replace(
+          (() =>
+            hightlighter.codeToHtml(code, {
+              theme: "dark-plus",
+              lang: lang,
+            }))(),
+          { html: true },
+        );
+      }
     },
   });
   return rewriter.transform(html);
