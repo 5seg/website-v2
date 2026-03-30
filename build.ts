@@ -24,14 +24,14 @@ pages.push({ loc: getURL("/articles") });
 const buildSitemap = () => {
   const tab = (size = 1) => " ".repeat(2 * size);
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const page of pages) {
-    xml += tab() + "<url>\n";
+    xml += tab() + "<sitemap>\n";
     xml += tab(2) + `<loc>${page.loc}</loc>\n`;
     if (page.lastmod) xml += tab(2) + `<lastmod>${page.lastmod}</lastmod>\n`;
-    xml += tab() + "</url>\n";
+    xml += tab() + "</sitemap>\n";
   }
-  xml += "</urlset>";
+  xml += "</sitemapindex>";
   return xml;
 };
 
