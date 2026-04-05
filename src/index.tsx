@@ -13,6 +13,8 @@ const api = new Elysia({ prefix: "/api" }).get("/", {
   message: "Hello",
 });
 
+const indexNow_key = Bun.env.INDEXNOW_KEY!;
+
 const app = new Elysia()
   .use(staticPlugin())
   .use(api)
@@ -93,6 +95,7 @@ const app = new Elysia()
   })
   .get("/index.css", () => file(join(__dirname, "index.css")))
   .get("/favicon.ico", () => file(join(__dirname, "favicon.ico")))
+  .get(`${indexNow_key}.txt`, () => indexNow_key)
   .listen(9555);
 
 console.log(

@@ -156,6 +156,11 @@ const build = async (endpoint: string) => {
   await Bun.write("dist/robots.txt", robotFile).then(() =>
     log(`✅ Copied robots.txt (${estimated()}ms)`),
   );
+  resetTimer();
+  const indexNowKey = Bun.env.INDEXNOW_KEY!;
+  await Bun.write(`dist/${indexNowKey}.txt`, indexNowKey).then(() =>
+    log(`✅ Copied indexNow API Key (${estimated()}ms)`),
+  );
 
   resetTimer();
   const xml = buildSitemap();
