@@ -86,6 +86,7 @@ const app = new Elysia()
         throw new NotFoundError("Cannot find article");
       }
     })();
+    console.log(id);
     const article = await Article(id);
     return (
       <Base title={`${title} - 5seg's blog`} desc="5seg's blog">
