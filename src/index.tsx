@@ -19,8 +19,8 @@ const app = new Elysia()
   .use(staticPlugin())
   .use(api)
   .use(html())
-  .onError(({ code }) => {
-    console.log(code);
+  .onError(({ error, code }) => {
+    console.log(error);
     if (code === "NOT_FOUND") {
       return (
         <Base title="404 - 5segments" desc="Nothing">
