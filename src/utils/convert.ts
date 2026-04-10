@@ -1,7 +1,11 @@
 import { markdown } from "bun";
-import { createHighlighter } from "shiki";
+import { bundledLanguages, createHighlighter } from "shiki";
 
 let langs: string[] = [];
+
+const isHighlightable = (lang: string) =>
+  Object.keys(bundledLanguages).find((k) => k === lang);
+
 const renderCallbacks: markdown.RenderCallbacks = {
   heading: (children, { level }) => `<h${level}>${children}</h${level}>`,
   paragraph: (children) => `<p>${children}</p>`,
@@ -35,7 +39,8 @@ const renderCallbacks: markdown.RenderCallbacks = {
   td: (children) => `<td>${children}</td>`,
 };
 
-const highlight = async (html: string, langs: string[]) => {
+const highlight = async (html: string, l: string[]) => {
+  const langs = l.map((lang) => (isHighlightable(lang) ? lang : "text"));
   const hightlighter = await createHighlighter({
     themes: ["dark-plus"],
     langs: langs,
@@ -57,7 +62,7 @@ const highlight = async (html: string, langs: string[]) => {
           (() =>
             hightlighter.codeToHtml(code, {
               theme: "dark-plus",
-              lang: lang,
+              lang: isHighlightable(lang) ? lang : "text",
             }))(),
           { html: true },
         );
