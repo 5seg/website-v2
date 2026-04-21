@@ -74,8 +74,6 @@ const highlight = async (html: string, l: string[]) => {
 
 export const convert = async (md: string) => {
   const html = Bun.markdown.render(md, renderCallbacks);
-  await Bun.write("raw.html",html)
   const highlighted = await highlight(html, langs);
-  await Bun.write("highlighted.html",highlighted)
   return highlighted;
 };
