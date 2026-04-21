@@ -52,7 +52,7 @@ const highlight = async (html: string, l: string[]) => {
     },
     text(text) {
       const code = text.text
-        .replaceAll("&quot", '"')
+        .replaceAll("&quot;", '"')
         .replaceAll("&amp;", "&")
         .replaceAll("&#x27;", "`")
         .replaceAll("&lt;", "<")
@@ -74,6 +74,8 @@ const highlight = async (html: string, l: string[]) => {
 
 export const convert = async (md: string) => {
   const html = Bun.markdown.render(md, renderCallbacks);
+  await Bun.write("raw.html",html)
   const highlighted = await highlight(html, langs);
+  await Bun.write("highlighted.html",highlighted)
   return highlighted;
 };
