@@ -15,9 +15,6 @@ body {
 }
 
 .article-main {
-  a {
-    text-decoration: underline;
-  }
   h2 {
     margin-top: 0.1rem;
     margin-bottom: 0.5rem;
@@ -43,6 +40,10 @@ body {
     content: "####";
     margin-right: calc(var(--spacing) * 2);
   }
+  ul {
+    list-style: disc;
+    margin-left: 1.25em;
+  }
 }
 
 code > pre.shiki {
@@ -66,4 +67,16 @@ hr {
 .hr2 {
   margin-top: calc(var(--spacing) * 2);
   margin-bottom: calc(var(--spacing) * 4);
+}
+
+table,
+th,
+td {
+  border: 1px solid #917378;
+  padding: 0.25em 0.5em;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0.25em 0;
 }
