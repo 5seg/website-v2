@@ -8,7 +8,13 @@ const isHighlightable = (lang: string) =>
 
 const renderCallbacks: markdown.RenderCallbacks = {
   heading: (children, { level }) => `<h${level}>${children}</h${level}>`,
-  paragraph: (children) => `<p>${children}</p>`,
+  paragraph: (children) => {
+    const replaced = children.replace(
+      /(?<!=["'])(https?:\/\/[^\s<>"']+)/g,
+      (url) => `<a href="${url}">${url}</a>`,
+    );
+    return `<p>${replaced}</p>`;
+  },
   strong: (children) => `<strong>${children}</strong>`,
   emphasis: (children) => `<em>${children}</em>`,
   codespan: (children) => `<code>${children}</code>`,
@@ -17,10 +23,12 @@ const renderCallbacks: markdown.RenderCallbacks = {
     if (!langs.includes(lang)) langs.push(lang);
     return `<pre><code class="shiki ${lang}">${Bun.escapeHTML(children)}</code></pre>`;
   },
-  link: (children, { href, title }) =>
-    title
+  link: (children, { href, title }) => {
+    console.log(href);
+    return title
       ? `<a href="${href}" title="${title}">${children}</a>`
-      : `<a href="${href}">${children}</a>`,
+      : `<a href="${href}">${children}</a>`;
+  },
   image: (children, { src, title }) =>
     title
       ? `<img src="${src}" alt="${children}" title="${title}" />`
