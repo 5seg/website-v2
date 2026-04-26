@@ -24,14 +24,14 @@ pages.push({ loc: getURL("/articles") });
 const buildSitemap = () => {
   const tab = (size = 1) => " ".repeat(2 * size);
   let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
-  xml += '<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
   for (const page of pages) {
-    xml += tab() + "<sitemap>\n";
+    xml += tab() + "<url>\n";
     xml += tab(2) + `<loc>${page.loc}</loc>\n`;
     if (page.lastmod) xml += tab(2) + `<lastmod>${page.lastmod}</lastmod>\n`;
-    xml += tab() + "</sitemap>\n";
+    xml += tab() + "</url>\n";
   }
-  xml += "</sitemapindex>";
+  xml += "</urlset>";
   return xml;
 };
 
@@ -50,7 +50,7 @@ const awaitForServer_startUp = () =>
           signal: AbortSignal.timeout(1000),
         });
         if (res.ok) break;
-      } catch {}
+      } catch { }
     }
     _();
   });
@@ -90,7 +90,7 @@ const build = async (endpoint: string) => {
   const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
   const resp = await fetch(
     endpoint +
-      "/articles?fields[0]=documentId&fields[1]=updatedAt&pagination[pageSize]=9999",
+    "/articles?fields[0]=documentId&fields[1]=updatedAt&pagination[pageSize]=9999",
   );
   const data = (await resp.json()).data as articlesT[];
   data.reverse().forEach((data) => {
