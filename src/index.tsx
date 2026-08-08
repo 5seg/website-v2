@@ -7,6 +7,7 @@ import { Hero } from "./components/Hero";
 import { RecentPosts } from "./components/RecentPosts";
 import { Articles } from "./components/Articles";
 import { Article } from "./components/Article";
+import { articleT } from "./types/article";
 
 const api = new Elysia({ prefix: "/api" }).get("/", {
   ok: true,
@@ -57,7 +58,7 @@ const app = new Elysia()
     );
   })
   .get("/articles", async () => {
-    const articles = await Articles("1");
+    const articles = await Articles(1);
     return (
       <Base title="5seg's blog" desc="記事一覧">
         {articles}
@@ -66,7 +67,7 @@ const app = new Elysia()
   })
   .get("/articles/page/:number", async ({ params }) => {
     const page = params.number;
-    const articles = await Articles(page);
+    const articles = await Articles(Number(page));
     return (
       <Base title="5seg's blog" desc="記事一覧">
         {articles}
@@ -76,12 +77,10 @@ const app = new Elysia()
   .get("/articles/:id", async ({ params }) => {
     const id = params.id;
     const title = await (async (): Promise<string> => {
-      const res = await fetch(
-        `${process.env.API_ENDPOINT}/articles/${id}?fields[0]=title`,
-      );
+      const res = await fetch(`${process.env.API_ENDPOINT}/articles/${id}`);
       if (res.ok) {
-        const json = await res.json();
-        return json.data.title;
+        const json = (await res.json()) as articleT;
+        return json.title;
       } else {
         throw new NotFoundError("Cannot find article");
       }
