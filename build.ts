@@ -1,15 +1,11 @@
 import { minify } from "html-minifier-terser";
 import { readdirSync, existsSync } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
+import { articleListT } from "./src/types/article";
 
 const pf = performance;
 let pf_start: number;
 let start: number;
-interface articlesT {
-  id: number;
-  documentId: string;
-  updatedAt: Date;
-}
 
 interface pageT {
   loc: string;
@@ -89,14 +85,14 @@ const build = async (endpoint: string) => {
   resetTimer();
   const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
   const resp = await fetch(endpoint + "/articles?limit=99999");
-  const data = (await resp.json()).data as articlesT[];
-  data.reverse().forEach((data) => {
+  const data = (await resp.json()) as articleListT;
+  data.data.reverse().forEach((data) => {
     pages.push({
-      loc: getURL(`/articles/${data.documentId}`),
-      lastmod: data.updatedAt,
+      loc: getURL(`/articles/${data.slug}`),
+      lastmod: new Date(data.createdAt),
     });
   });
-  const articles = data.map((x) => x.documentId);
+  const articles = data.data.map((x) => x.slug);
   log(`✅ Found ${articles.length} articles`);
   await awaitForServer_startUp();
   log(`🕓 Server started (${estimated()}ms)`);
