@@ -1,24 +1,11 @@
 import { Html } from "@elysiajs/html";
 import { Card } from "./Card";
 import { join } from "node:path";
-
-interface articleListT {
-  data: {
-    id: number;
-    documentId: string;
-    title: string;
-    /** Date as string */
-    publishedAt: string;
-  }[];
-}
+import { articleListT } from "../types/article";
 
 const get = async () => {
   const url = new URL(`${process.env.API_ENDPOINT}/articles`);
-  url.searchParams.append("fields[0]", "documentId");
-  url.searchParams.append("fields[1]", "title");
-  url.searchParams.append("fields[2]", "publishedAt");
-  url.searchParams.append("sort", "publishedAt:desc");
-  url.searchParams.append("pagination[limit]", "5");
+  url.searchParams.append("limit", "5");
   const res = await fetch(url);
   if (res.ok) {
     const data = (await res.json()) as articleListT;
@@ -35,8 +22,8 @@ export async function RecentPosts() {
         {articles ? (
           articles.data.map((article) => (
             <div class="recent-articles">
-              <a href={`/articles/${article.documentId}?ref=top`}>
-                <p>{article.publishedAt}</p>
+              <a href={`/articles/${article.slug}?ref=top`}>
+                <p>{article.createdAt}</p>
                 <h3>{article.title}</h3>
               </a>
             </div>
