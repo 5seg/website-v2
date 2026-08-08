@@ -50,7 +50,7 @@ const awaitForServer_startUp = () =>
           signal: AbortSignal.timeout(1000),
         });
         if (res.ok) break;
-      } catch { }
+      } catch {}
     }
     _();
   });
@@ -88,10 +88,7 @@ const build = async (endpoint: string) => {
   log("🔄 Building");
   resetTimer();
   const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
-  const resp = await fetch(
-    endpoint +
-    "/articles?fields[0]=documentId&fields[1]=updatedAt&pagination[pageSize]=9999",
-  );
+  const resp = await fetch(endpoint + "/articles?limit=99999");
   const data = (await resp.json()).data as articlesT[];
   data.reverse().forEach((data) => {
     pages.push({
