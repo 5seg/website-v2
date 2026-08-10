@@ -2,6 +2,7 @@ import { minify } from "html-minifier-terser";
 import { readdirSync, existsSync } from "node:fs";
 import { mkdir, rm } from "node:fs/promises";
 import { articleListT } from "./src/types/article";
+import { contentPerPage } from "./src/consts";
 
 const pf = performance;
 let pf_start: number;
@@ -86,6 +87,14 @@ const build = async (endpoint: string) => {
   const proc = Bun.spawn(["bun", "dev"], { stdout: "ignore" });
   const resp = await fetch(endpoint + "/articles?limit=99999");
   const data = (await resp.json()) as articleListT;
+  const pageCount = Math.ceil(data.meta.total / contentPerPage);
+  let otherPages: string[] = [];
+  for (let i = 0; i < pageCount; i++) {
+    pages.push({
+      loc: getURL(`/articles/page/${i + 1}`),
+    });
+    otherPages.push(`/articles/page/${i + 1}`);
+  }
   data.data.reverse().forEach((data) => {
     pages.push({
       loc: getURL(`/articles/${data.slug}`),
@@ -100,6 +109,7 @@ const build = async (endpoint: string) => {
   const locations: string[] = [
     "/",
     "/articles",
+    ...otherPages,
     ...articles.map((x) => "/articles/" + x),
   ];
 
@@ -107,12 +117,16 @@ const build = async (endpoint: string) => {
   await mkdir("dist");
 
   const fetchPromises = locations.map(async (x) => {
-    const res = await minifier(
-      await (await fetch("http://127.0.0.1:9555" + x)).text(),
-    );
+    const raw = await (await fetch("http://127.0.0.1:9555" + x)).text();
     const filename = x;
     const path = "dist" + (filename.length > 1 ? filename : "/index") + ".html";
-    await Bun.write(path, res);
+    try {
+      const res = await minifier(raw);
+      await Bun.write(path, res);
+    } catch (e) {
+      console.error("Minify failed. Fallback to raw html", e);
+      await Bun.write(path, raw);
+    }
     log("📥", path);
   });
   resetTimer();
