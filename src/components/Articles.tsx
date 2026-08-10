@@ -2,8 +2,7 @@ import { Html } from "@elysiajs/html";
 import { Card } from "./Card";
 import { join } from "node:path";
 import { articleListT } from "../types/article";
-
-const contentPerPage = 10;
+import { contentPerPage } from "../consts";
 
 const get = async (page: number) => {
   const builtURL = new URL(`${process.env.API_ENDPOINT}/articles`);
